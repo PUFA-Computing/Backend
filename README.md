@@ -1,0 +1,1 @@
+[![CI/CD Pipeline](https://github.com/PUMA-Computing/Backend/actions/workflows/main.yml/badge.svg)](https://github.com/PUMA-Computing/Backend/actions/workflows/main.yml)

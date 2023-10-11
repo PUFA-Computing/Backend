@@ -2,6 +2,7 @@ package api
 
 import (
 	"Backend/api/handlers/event"
+	"Backend/api/handlers/merch"
 	"Backend/api/handlers/news"
 	"Backend/api/handlers/permission"
 	"Backend/api/handlers/role"
@@ -28,12 +29,14 @@ func SetupRoutes() *gin.Engine {
 	newsService := services.NewNewsService()
 	roleService := services.NewRoleService()
 	permissionService := services.NewPermissionService()
+	merchService := services.NewMerchService()
 
 	userHandlers := user.NewUserHandlers(userService, permissionService)
 	eventHandlers := event.NewEventHandlers(eventService, permissionService)
 	newsHandlers := news.NewNewsHandler(newsService, permissionService)
 	roleHandlers := role.NewRoleHandler(roleService, userService, permissionService)
 	permissionHandlers := permission.NewPermissionHandler(permissionService)
+	merchHandlers := merch.NewMerchHandler(merchService, permissionService)
 
 	authRoutes := r.Group("/auth")
 	{
@@ -91,6 +94,65 @@ func SetupRoutes() *gin.Engine {
 		permissionRoutes.GET("/list", permissionHandlers.ListPermissions)
 		permissionRoutes.POST("/assign/:roleID", permissionHandlers.AssignPermissionToRole)
 
+	}
+	merchRoutes := r.Group("/merch")
+	{
+		// Products
+		merchRoutes.GET("/", merchHandlers.ListProducts)
+		merchRoutes.GET("/products/:productID", merchHandlers.GetProductByID)
+		merchRoutes.GET("/products/:productID/sizes", merchHandlers.GetSizeProduct)
+		merchRoutes.GET("/products/:productID/colors", merchHandlers.GetColorProduct)
+		merchRoutes.GET("/products/:productID/price", merchHandlers.GetProductPrice)
+
+		// Categories
+		//merchRoutes.GET("/categories", merchHandlers.ListCategories)
+		//merchRoutes.GET("/categories/:categoryID", merchHandlers.GetCategoryByID)
+
+		// Coupons
+		//merchRoutes.GET("/coupons", merchHandlers.ListCoupons)
+		//merchRoutes.GET("/coupons/:code", merchHandlers.GetCouponByCode)
+		//merchRoutes.POST("/transactions/:transactionID/apply-coupon/:code", merchHandlers.ApplyCoupon)
+
+		// Restricted Routes
+		merchRoutes.Use(middleware.TokenMiddleware())
+
+		// Products
+		merchRoutes.POST("/products/create", merchHandlers.CreateProduct)
+		merchRoutes.PUT("/products/:productID", merchHandlers.UpdateProduct)
+		merchRoutes.DELETE("/products/:productID", merchHandlers.DeleteProduct)
+
+		// Categories
+		//merchRoutes.POST("/categories/create", merchHandlers.Create)
+		//merchRoutes.PUT("/categories/:categoryID/edit", merchHandlers.UpdateCategory)
+		//merchRoutes.DELETE("/categories/:categoryID/delete", merchHandlers.DeleteCategory)
+
+		// Size
+		//merchRoutes.POST("/sizes/create", merchHandlers.CreateSize)
+		//merchRoutes.PUT("/sizes/:sizeID/edit", merchHandlers.UpdateSize)
+		//merchRoutes.DELETE("/sizes/:sizeID/delete", merchHandlers.DeleteSize)
+
+		// Color
+		//merchRoutes.POST("/colors/create", merchHandlers.CreateColor)
+		//merchRoutes.PUT("/colors/:colorID/edit", merchHandlers.UpdateColor)
+		//merchRoutes.DELETE("/colors/:colorID/delete", merchHandlers.DeleteColor)
+
+		// Transactions
+		//merchRoutes.GET("/transactions", merchHandlers.ListTransactions)
+		//merchRoutes.POST("/transactions/create", merchHandlers.CreateTransaction)
+		//merchRoutes.GET("/transactions/:transactionID", merchHandlers.GetTransaction)
+
+		// Price
+		//merchRoutes.POST("/prices/create", merchHandlers.CreatePrice)
+		//merchRoutes.PUT("/prices/:priceID/edit", merchHandlers.UpdatePrice)
+		//merchRoutes.DELETE("/prices/:priceID/delete", merchHandlers.DeletePrice)
+
+		// Image
+		//merchRoutes.POST("/products/:product_id/images", merchHandlers.UploadImageProduct)
+
+		// Coupons
+		//merchRoutes.POST("/coupons/create", merchHandlers.CreateCoupon)
+		//merchRoutes.PUT("/coupons/:couponID/edit", merchHandlers.UpdateCoupon)
+		//merchRoutes.DELETE("/coupons/:couponID/delete", merchHandlers.DeleteCoupon)
 	}
 	return r
 }

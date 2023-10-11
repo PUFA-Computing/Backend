@@ -1,8 +1,8 @@
 Project puma_website {
   database_type: 'PostgreSQL'
   Note: '''
-    # Ecommerce Database
-    **markdown content here**
+    # PUMA Website Database Schema
+    **Version 1.4**
   '''
 }
 
@@ -65,4 +65,81 @@ Table event_registrations {
     event_id int [ref: > events.id]
     user_id uuid [ref: > users.id]
     registration_date datetime [default: `now()`]
+}
+
+Table merch.category {
+    id int [pk, increment]
+    name varchar [not null]
+    created_at datetime [default: `now()`]
+    updated_at datetime [default: `now()`]
+}
+
+Table merch.product {
+    id int [pk, increment]
+    title varchar [not null]
+    description varchar [not null]
+    category_id int [ref: > merch.category.id]
+    primary_image varchar [not null]
+    created_at datetime [default: `now()`]
+    updated_at datetime [default: `now()`]
+}
+
+Table merch.size {
+    id int [pk, increment]
+    name varchar [not null]
+    product_id int [ref: > merch.product.id]
+    created_at datetime [default: `now()`]
+    updated_at datetime [default: `now()`]
+}
+
+Table merch.color {
+    id int [pk, increment]
+    name varchar [not null]
+    product_id int [ref: > merch.product.id]
+    created_at datetime [default: `now()`]
+    updated_at datetime [default: `now()`]
+}
+
+Table merch.price {
+    id int [pk, increment]
+    price decimal [not null]
+    product_id int [ref: > merch.product.id]
+    size_id int [ref: > merch.size.id]
+    color_id int [ref: > merch.color.id]
+    created_at datetime [default: `now()`]
+    updated_at datetime [default: `now()`]
+}
+
+Table merch.transaction {
+    id int [pk, increment]
+    user_id uuid [ref: > users.id]
+    product_id int [ref: > merch.product.id]
+    coupon_id int [ref: > merch.coupon.id]
+    proof_of_payment varchar [not null]
+    status varchar [not null]
+    paid_at datetime [default: `now()`]
+    created_at datetime [default: `now()`]
+    updated_at datetime [default: `now()`]
+}
+
+Table merch.image {
+    id int [pk, increment]
+    path varchar [not null]
+    product_id int [ref: > merch.product.id]
+    created_at datetime [default: `now()`]
+    updated_at datetime [default: `now()`]
+}
+
+Table merch.coupon {
+    id int [pk, increment]
+    code varchar [not null]
+    description varchar [not null]
+    discount_type varchar [not null]
+    discount_value numeric [not null]
+    max_use_count int [not null]
+    used_count int [default: 0]
+    valid_from datetime [not null]
+    valid_until datetime [not null]
+    created_at datetime [default: `now()`]
+    updated_at datetime [default: `now()`]
 }

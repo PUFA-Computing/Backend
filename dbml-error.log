@@ -1,0 +1,54 @@
+2023-10-11T09:55:51.947Z
+SyntaxError: You have a syntax error at "000008_merch_features.up.sql" line 1 column 1. Can't find table "undefined"."users"
+    at C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\lib\cli\utils.js:45:13
+    at Array.forEach (<anonymous>)
+    at generate (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\lib\cli\utils.js:39:14)
+    at importHandler (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\lib\cli\import.js:25:27)
+    at Object.sql2dbml (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\lib\cli\index.js:27:23)
+    at Object.<anonymous> (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\bin\sql2dbml.js:4:19)
+    at Module._compile (node:internal/modules/cjs/loader:1241:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1295:10)
+    at Module.load (node:internal/modules/cjs/loader:1091:32)
+    at Module._load (node:internal/modules/cjs/loader:938:12)
+
+ROOT_ERROR:
+Error: Can't find table "undefined"."users"
+    at Endpoint.error (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\@dbml\core\lib\model_structure\element.js:55:13)
+    at new Endpoint (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\@dbml\core\lib\model_structure\endpoint.js:59:13)
+    at C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\@dbml\core\lib\model_structure\ref.js:71:31
+    at Array.forEach (<anonymous>)
+    at Ref.processEndpoints (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\@dbml\core\lib\model_structure\ref.js:70:20)
+    at new Ref (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\@dbml\core\lib\model_structure\ref.js:58:11)
+    at C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\@dbml\core\lib\model_structure\database.js:133:28
+    at Array.forEach (<anonymous>)
+    at Database.processSchemaElements (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\@dbml\core\lib\model_structure\database.js:107:16)
+    at new Database (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\@dbml\core\lib\model_structure\database.js:68:11)
+{"start":{"line":1,"column":1}}
+
+2023-10-11T09:59:50.195Z
+SyntaxError: You have a syntax error at "pumadev_dump.sql" line 333 column 0. mismatched input '1' expecting <EOF>
+    at C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\lib\cli\utils.js:45:13
+    at Array.forEach (<anonymous>)
+    at generate (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\lib\cli\utils.js:39:14)
+    at importHandler (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\lib\cli\import.js:25:27)
+    at Object.sql2dbml (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\lib\cli\index.js:27:23)
+    at Object.<anonymous> (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\bin\sql2dbml.js:4:19)
+    at Module._compile (node:internal/modules/cjs/loader:1241:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1295:10)
+    at Module.load (node:internal/modules/cjs/loader:1091:32)
+    at Module._load (node:internal/modules/cjs/loader:938:12)
+
+ROOT_ERROR:
+Error: mismatched input '1' expecting <EOF>
+    at ParserErrorListener.syntaxError (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\@dbml\core\lib\parse\ANTLR\ASTGeneration\ParserErrorListener.js:35:13)
+    at C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\antlr4\dist\antlr4.node.cjs:1:42636
+    at Array.map (<anonymous>)
+    at vt.syntaxError (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\antlr4\dist\antlr4.node.cjs:1:42626)
+    at PostgreSQLParser.notifyErrorListeners (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\antlr4\dist\antlr4.node.cjs:1:102585)
+    at Ae.reportInputMismatch (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\antlr4\dist\antlr4.node.cjs:1:91088)
+    at Ae.reportError (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\antlr4\dist\antlr4.node.cjs:1:89324)
+    at PostgreSQLParser.root (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\@dbml\core\lib\parse\ANTLR\parsers\postgresql\PostgreSQLParser.js:3:304507)
+    at parse (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\@dbml\core\lib\parse\ANTLR\ASTGeneration\index.js:26:28)
+    at Function.parsePostgresToJSONv2 (C:\Users\irfan\AppData\Roaming\nvm\v20.8.0\node_modules\@dbml\cli\node_modules\@dbml\core\lib\parse\Parser.js:39:39)
+{"start":{"line":333,"column":0}}
+
