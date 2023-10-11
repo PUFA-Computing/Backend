@@ -2,6 +2,7 @@ package api
 
 import (
 	"Backend/api/handlers/event"
+	"Backend/api/handlers/files"
 	"Backend/api/handlers/merch"
 	"Backend/api/handlers/news"
 	"Backend/api/handlers/permission"
@@ -18,11 +19,13 @@ func SetupRoutes() *gin.Engine {
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"}, // Add your frontend URL
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH"},
 		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
+
+	r.Static("/public", "./public")
 
 	userService := services.NewUserService()
 	eventService := services.NewEventService()
@@ -30,6 +33,7 @@ func SetupRoutes() *gin.Engine {
 	roleService := services.NewRoleService()
 	permissionService := services.NewPermissionService()
 	merchService := services.NewMerchService()
+	filesService := services.NewFilesService()
 
 	userHandlers := user.NewUserHandlers(userService, permissionService)
 	eventHandlers := event.NewEventHandlers(eventService, permissionService)
@@ -37,6 +41,7 @@ func SetupRoutes() *gin.Engine {
 	roleHandlers := role.NewRoleHandler(roleService, userService, permissionService)
 	permissionHandlers := permission.NewPermissionHandler(permissionService)
 	merchHandlers := merch.NewMerchHandler(merchService, permissionService)
+	filesHandlers := files.NewFilesHandler(filesService, permissionService)
 
 	authRoutes := r.Group("/auth")
 	{
@@ -153,6 +158,11 @@ func SetupRoutes() *gin.Engine {
 		//merchRoutes.POST("/coupons/create", merchHandlers.CreateCoupon)
 		//merchRoutes.PUT("/coupons/:couponID/edit", merchHandlers.UpdateCoupon)
 		//merchRoutes.DELETE("/coupons/:couponID/delete", merchHandlers.DeleteCoupon)
+	}
+
+	filesRoutes := r.Group("/files")
+	{
+		filesRoutes.PUT("/", filesHandlers.UploadFile)
 	}
 	return r
 }
