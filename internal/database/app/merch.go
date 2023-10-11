@@ -127,3 +127,68 @@ func GetProductPrice(productID int) (*models.MerchPrice, error) {
  * end
  * @api {products}
  */
+
+/**
+ * start database
+ * @api {categories}
+ */
+
+func CreateCategory(category *models.MerchCategory) error {
+	_, err := database.DB.Exec(context.Background(), `
+		INSERT INTO merch.category (name, created_at, updated_at) 
+		VALUES ($1, $2, $3)`,
+		category.Name, category.CreatedAt, category.UpdatedAt)
+	return err
+}
+
+func UpdateCategory(categoryID int, updatedCategory *models.MerchCategory) error {
+	_, err := database.DB.Exec(context.Background(), `
+		UPDATE merch.category SET name = $1, updated_at = $2
+		WHERE id = $3`,
+		updatedCategory.Name, updatedCategory.UpdatedAt, categoryID)
+	return err
+}
+
+func DeleteCategory(categoryID int) error {
+	_, err := database.DB.Exec(context.Background(), `
+		DELETE FROM merch.category WHERE id = $1`, categoryID)
+	return err
+}
+
+func ListCategories() ([]*models.MerchCategory, error) {
+	rows, err := database.DB.Query(context.Background(), `
+		SELECT id, name, created_at, updated_at FROM merch.category`)
+	if err != nil {
+		return nil, err
+	}
+
+	var categories []*models.MerchCategory
+	for rows.Next() {
+		var category models.MerchCategory
+		err := rows.Scan(&category.ID, &category.Name, &category.CreatedAt, &category.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		categories = append(categories, &category)
+	}
+
+	return categories, nil
+}
+
+func GetCategoryByID(categoryID int) (*models.MerchCategory, error) {
+	var category models.MerchCategory
+	err := database.DB.QueryRow(context.Background(), `
+		SELECT id, name, created_at, updated_at FROM merch.category WHERE id = $1`, categoryID).
+		Scan(&category.ID, &category.Name, &category.CreatedAt, &category.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+
+	return &category, nil
+}
+
+/**
+ * end database
+ * @api {categories}
+ */

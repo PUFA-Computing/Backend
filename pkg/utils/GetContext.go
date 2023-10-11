@@ -13,3 +13,12 @@ func GetProductID(c *gin.Context) (int, error) {
 
 	return productID, nil
 }
+
+func GetCategoryByID(c *gin.Context) (int, error) {
+	categoryID, err := strconv.Atoi(c.Param("categoryID"))
+	if err != nil {
+		return 0, err
+	}
+
+	return categoryID, nil
+}

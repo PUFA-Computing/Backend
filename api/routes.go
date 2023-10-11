@@ -110,8 +110,8 @@ func SetupRoutes() *gin.Engine {
 		merchRoutes.GET("/products/:productID/price", merchHandlers.GetProductPrice)
 
 		// Categories
-		//merchRoutes.GET("/categories", merchHandlers.ListCategories)
-		//merchRoutes.GET("/categories/:categoryID", merchHandlers.GetCategoryByID)
+		merchRoutes.GET("/categories", merchHandlers.ListCategories)
+		merchRoutes.GET("/categories/:categoryID", merchHandlers.GetCategoryByID)
 
 		// Coupons
 		//merchRoutes.GET("/coupons", merchHandlers.ListCoupons)
@@ -127,9 +127,9 @@ func SetupRoutes() *gin.Engine {
 		merchRoutes.DELETE("/products/:productID", merchHandlers.DeleteProduct)
 
 		// Categories
-		//merchRoutes.POST("/categories/create", merchHandlers.Create)
-		//merchRoutes.PUT("/categories/:categoryID/edit", merchHandlers.UpdateCategory)
-		//merchRoutes.DELETE("/categories/:categoryID/delete", merchHandlers.DeleteCategory)
+		merchRoutes.POST("/categories/create", merchHandlers.CreateCategory)
+		merchRoutes.PUT("/categories/:categoryID/edit", merchHandlers.UpdateCategory)
+		merchRoutes.DELETE("/categories/:categoryID/delete", merchHandlers.DeleteCategory)
 
 		// Size
 		//merchRoutes.POST("/sizes/create", merchHandlers.CreateSize)

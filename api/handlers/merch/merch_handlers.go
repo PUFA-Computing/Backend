@@ -20,6 +20,11 @@ func NewMerchHandler(merchService *services.MerchService, permissionService *ser
 	}
 }
 
+/**
+ * start
+ * @api {products}
+ */
+
 func (h *Handler) CreateProduct(c *gin.Context) {
 	var newProduct models.MerchProduct
 	if err := c.ShouldBindJSON(&newProduct); err != nil {
@@ -144,3 +149,95 @@ func (h *Handler) GetProductPrice(c *gin.Context) {
 
 	c.JSON(http.StatusOK, product)
 }
+
+/**
+ * end
+ * @api {products}
+ */
+
+/**
+ * start
+ * @api {categories}
+ */
+
+func (h *Handler) CreateCategory(c *gin.Context) {
+	var newCategory models.MerchCategory
+	if err := c.ShouldBindJSON(&newCategory); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.MerchService.CreateCategory(&newCategory); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create category"})
+		return
+	}
+
+	c.JSON(http.StatusOK, newCategory)
+}
+
+func (h *Handler) UpdateCategory(c *gin.Context) {
+	categoryID, err := utils.GetCategoryByID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var updatedCategory models.MerchCategory
+	if err := c.ShouldBindJSON(&updatedCategory); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.MerchService.UpdateCategory(categoryID, &updatedCategory); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update category"})
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedCategory)
+}
+
+func (h *Handler) DeleteCategory(c *gin.Context) {
+	categoryID, err := utils.GetCategoryByID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.MerchService.DeleteCategory(categoryID); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete category"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Category deleted successfully"})
+}
+
+func (h *Handler) ListCategories(c *gin.Context) {
+	categories, err := h.MerchService.ListCategories()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to list categories"})
+		return
+	}
+
+	c.JSON(http.StatusOK, categories)
+}
+
+func (h *Handler) GetCategoryByID(c *gin.Context) {
+	categoryID, err := utils.GetCategoryByID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	category, err := h.MerchService.GetCategoryByID(categoryID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get category"})
+		return
+	}
+
+	c.JSON(http.StatusOK, category)
+}
+
+/**
+ * end
+ * @api {categories}
+ */
