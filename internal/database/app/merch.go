@@ -192,3 +192,142 @@ func GetCategoryByID(categoryID int) (*models.MerchCategory, error) {
  * end database
  * @api {categories}
  */
+
+/**
+ * start database
+ * @api {sizes}
+ */
+
+func CreateSize(size *models.MerchSize) error {
+	_, err := database.DB.Exec(context.Background(), `
+		INSERT INTO merch.size (product_id, size, created_at, updated_at) 
+		VALUES ($1, $2, $3, $4)`,
+		size.ProductID, size.Name, size.CreatedAt, size.UpdatedAt)
+	return err
+}
+
+func UpdateSize(sizeID int, updatedSize *models.MerchSize) error {
+	_, err := database.DB.Exec(context.Background(), `
+		UPDATE merch.size SET product_id = $1, size = $2, updated_at = $3
+		WHERE id = $4`,
+		updatedSize.ProductID, updatedSize.Name, updatedSize.UpdatedAt, sizeID)
+	return err
+}
+
+func DeleteSize(sizeID int) error {
+	_, err := database.DB.Exec(context.Background(), `
+		DELETE FROM merch.size WHERE id = $1`, sizeID)
+	return err
+}
+
+func GetSizeByID(sizeID int) (*models.MerchSize, error) {
+	var size models.MerchSize
+	err := database.DB.QueryRow(context.Background(), `
+		SELECT id, product_id, size, created_at, updated_at FROM merch.size WHERE id = $1`, sizeID).
+		Scan(&size.ID, &size.ProductID, &size.Name, &size.CreatedAt, &size.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+
+	return &size, nil
+}
+
+/**
+ * end database
+ * @api {sizes}
+ */
+
+/**
+ * start database
+ * @api {colors}
+ */
+
+func CreateColor(color *models.MerchColor) error {
+	_, err := database.DB.Exec(context.Background(), `
+		INSERT INTO merch.color (product_id, color, created_at, updated_at) 
+		VALUES ($1, $2, $3, $4)`,
+		color.ProductID, color.Name, color.CreatedAt, color.UpdatedAt)
+	return err
+}
+
+func UpdateColor(colorID int, updatedColor *models.MerchColor) error {
+	_, err := database.DB.Exec(context.Background(), `
+		UPDATE merch.color SET product_id = $1, color = $2, updated_at = $3
+		WHERE id = $4`,
+		updatedColor.ProductID, updatedColor.Name, updatedColor.UpdatedAt, colorID)
+	return err
+}
+
+func DeleteColor(colorID int) error {
+	_, err := database.DB.Exec(context.Background(), `
+		DELETE FROM merch.color WHERE id = $1`, colorID)
+	return err
+}
+
+func GetColorByID(colorID int) (*models.MerchColor, error) {
+	var color models.MerchColor
+	err := database.DB.QueryRow(context.Background(), `
+		SELECT id, product_id, color, created_at, updated_at FROM merch.color WHERE id = $1`, colorID).
+		Scan(&color.ID, &color.ProductID, &color.Name, &color.CreatedAt, &color.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+
+	return &color, nil
+}
+
+/**
+ * end database
+ * @api {colors}
+ */
+
+/**
+ * start database
+ * @api {transactions}
+ */
+
+func CreateTransaction(transaction *models.MerchTransaction) error {
+	_, err := database.DB.Exec(context.Background(), `
+		INSERT INTO merch.transaction (user_id, product_id, coupon_id, proof_of_payment, status, paid_at, created_at, updated_at) 
+		VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+		transaction.UserID, transaction.ProductID, transaction.CouponID, transaction.ProofOfPayment, transaction.Status, transaction.PaidAt, transaction.CreatedAt, transaction.UpdatedAt)
+	return err
+}
+
+func ListTransactions() ([]*models.MerchTransaction, error) {
+	rows, err := database.DB.Query(context.Background(), `
+		SELECT id, user_id, product_id, coupon_id, proof_of_payment, status, paid_at, created_at, updated_at FROM merch.transaction`)
+	if err != nil {
+		return nil, err
+	}
+
+	var transactions []*models.MerchTransaction
+	for rows.Next() {
+		var transaction models.MerchTransaction
+		err := rows.Scan(&transaction.ID, &transaction.UserID, &transaction.ProductID, &transaction.CouponID, &transaction.ProofOfPayment, &transaction.Status, &transaction.PaidAt, &transaction.CreatedAt, &transaction.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		transactions = append(transactions, &transaction)
+	}
+
+	return transactions, nil
+}
+
+func GetTransaction(transactionID int) (*models.MerchTransaction, error) {
+	var transaction models.MerchTransaction
+	err := database.DB.QueryRow(context.Background(), `
+		SELECT id, user_id, product_id, coupon_id, proof_of_payment, status, paid_at, created_at, updated_at FROM merch.transaction WHERE id = $1`, transactionID).
+		Scan(&transaction.ID, &transaction.UserID, &transaction.ProductID, &transaction.CouponID, &transaction.ProofOfPayment, &transaction.Status, &transaction.PaidAt, &transaction.CreatedAt, &transaction.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+
+	return &transaction, nil
+}
+
+/**
+ * end database
+ * @api {transactions}
+ */

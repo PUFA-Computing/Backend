@@ -132,19 +132,19 @@ func SetupRoutes() *gin.Engine {
 		merchRoutes.DELETE("/categories/:categoryID/delete", merchHandlers.DeleteCategory)
 
 		// Size
-		//merchRoutes.POST("/sizes/create", merchHandlers.CreateSize)
-		//merchRoutes.PUT("/sizes/:sizeID/edit", merchHandlers.UpdateSize)
-		//merchRoutes.DELETE("/sizes/:sizeID/delete", merchHandlers.DeleteSize)
+		merchRoutes.POST("/sizes/create", merchHandlers.CreateSize)
+		merchRoutes.PUT("/sizes/:sizeID/edit", merchHandlers.UpdateSize)
+		merchRoutes.DELETE("/sizes/:sizeID/delete", merchHandlers.DeleteSize)
 
 		// Color
-		//merchRoutes.POST("/colors/create", merchHandlers.CreateColor)
-		//merchRoutes.PUT("/colors/:colorID/edit", merchHandlers.UpdateColor)
-		//merchRoutes.DELETE("/colors/:colorID/delete", merchHandlers.DeleteColor)
+		merchRoutes.POST("/colors/create", merchHandlers.CreateColor)
+		merchRoutes.PUT("/colors/:colorID/edit", merchHandlers.UpdateColor)
+		merchRoutes.DELETE("/colors/:colorID/delete", merchHandlers.DeleteColor)
 
 		// Transactions
-		//merchRoutes.GET("/transactions", merchHandlers.ListTransactions)
-		//merchRoutes.POST("/transactions/create", merchHandlers.CreateTransaction)
-		//merchRoutes.GET("/transactions/:transactionID", merchHandlers.GetTransaction)
+		merchRoutes.GET("/transactions", merchHandlers.ListTransactions)
+		merchRoutes.POST("/transactions/create", merchHandlers.CreateTransaction)
+		merchRoutes.GET("/transactions/:transactionID", merchHandlers.GetTransaction)
 
 		// Price
 		//merchRoutes.POST("/prices/create", merchHandlers.CreatePrice)

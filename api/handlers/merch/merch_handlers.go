@@ -176,7 +176,7 @@ func (h *Handler) CreateCategory(c *gin.Context) {
 }
 
 func (h *Handler) UpdateCategory(c *gin.Context) {
-	categoryID, err := utils.GetCategoryByID(c)
+	categoryID, err := utils.GetCategoryID(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -197,7 +197,7 @@ func (h *Handler) UpdateCategory(c *gin.Context) {
 }
 
 func (h *Handler) DeleteCategory(c *gin.Context) {
-	categoryID, err := utils.GetCategoryByID(c)
+	categoryID, err := utils.GetCategoryID(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -222,7 +222,7 @@ func (h *Handler) ListCategories(c *gin.Context) {
 }
 
 func (h *Handler) GetCategoryByID(c *gin.Context) {
-	categoryID, err := utils.GetCategoryByID(c)
+	categoryID, err := utils.GetCategoryID(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -240,4 +240,177 @@ func (h *Handler) GetCategoryByID(c *gin.Context) {
 /**
  * end
  * @api {categories}
+ */
+
+/**
+ * start
+ * @api {sizes}
+ */
+
+func (h *Handler) CreateSize(c *gin.Context) {
+	var newSize models.MerchSize
+	if err := c.ShouldBindJSON(&newSize); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.MerchService.CreateSize(&newSize); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create size"})
+		return
+	}
+
+	c.JSON(http.StatusOK, newSize)
+}
+
+func (h *Handler) UpdateSize(c *gin.Context) {
+	sizeID, err := utils.GetSizeID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var updatedSize models.MerchSize
+	if err := c.ShouldBindJSON(&updatedSize); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.MerchService.UpdateSize(sizeID, &updatedSize); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update size"})
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedSize)
+}
+
+func (h *Handler) DeleteSize(c *gin.Context) {
+	sizeID, err := utils.GetSizeID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.MerchService.DeleteSize(sizeID); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete size"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Size deleted successfully"})
+}
+
+/**
+ * end
+ * @api {sizes}
+ */
+
+/**
+ * start
+ * @api {colors}
+ */
+
+func (h *Handler) CreateColor(c *gin.Context) {
+	var newColor models.MerchColor
+	if err := c.ShouldBindJSON(&newColor); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.MerchService.CreateColor(&newColor); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create color"})
+		return
+	}
+
+	c.JSON(http.StatusOK, newColor)
+}
+
+func (h *Handler) UpdateColor(c *gin.Context) {
+	colorID, err := utils.GetColorID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var updatedColor models.MerchColor
+	if err := c.ShouldBindJSON(&updatedColor); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.MerchService.UpdateColor(colorID, &updatedColor); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update color"})
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedColor)
+}
+
+func (h *Handler) DeleteColor(c *gin.Context) {
+	colorID, err := utils.GetColorID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.MerchService.DeleteColor(colorID); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete color"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Color deleted successfully"})
+}
+
+/**
+ * end
+ * @api {colors}
+ */
+
+/**
+ * start
+ * @api {transactions}
+ */
+
+func (h *Handler) CreateTransaction(c *gin.Context) {
+	var newTransaction models.MerchTransaction
+	if err := c.ShouldBindJSON(&newTransaction); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.MerchService.CreateTransaction(&newTransaction); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create transaction"})
+		return
+	}
+
+	c.JSON(http.StatusOK, newTransaction)
+}
+
+func (h *Handler) ListTransactions(c *gin.Context) {
+	transactions, err := h.MerchService.ListTransactions()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to list transactions"})
+		return
+	}
+
+	c.JSON(http.StatusOK, transactions)
+}
+
+func (h *Handler) GetTransaction(c *gin.Context) {
+	transactionID, err := utils.GetTransactionID(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	transaction, err := h.MerchService.GetTransaction(transactionID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get transaction"})
+		return
+	}
+
+	c.JSON(http.StatusOK, transaction)
+}
+
+/**
+ * end
+ * @api {transactions}
  */

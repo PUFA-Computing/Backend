@@ -156,3 +156,121 @@ func (ms *MerchService) GetCategoryByID(categoryID int) (*models.MerchCategory, 
  * end services
  * @api {categories}
  */
+
+/**
+ * start services
+ * @api {sizes}
+ */
+
+func (ms *MerchService) CreateSize(merch *models.MerchSize) error {
+	if err := app.CreateSize(merch); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (ms *MerchService) UpdateSize(sizeID int, updatedSize *models.MerchSize) error {
+	existingSize, err := app.GetSizeByID(sizeID)
+	if err != nil {
+		return err
+	}
+
+	updatedSize.CreatedAt = existingSize.CreatedAt
+
+	if err := app.UpdateSize(sizeID, updatedSize); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (ms *MerchService) DeleteSize(sizeID int) error {
+	if err := app.DeleteSize(sizeID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+/**
+ * end services
+ * @api {sizes}
+ */
+
+/**
+ * start services
+ * @api {colors}
+ */
+
+func (ms *MerchService) CreateColor(merch *models.MerchColor) error {
+	if err := app.CreateColor(merch); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (ms *MerchService) UpdateColor(colorID int, updatedColor *models.MerchColor) error {
+	existingColor, err := app.GetColorByID(colorID)
+	if err != nil {
+		return err
+	}
+
+	updatedColor.CreatedAt = existingColor.CreatedAt
+
+	if err := app.UpdateColor(colorID, updatedColor); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (ms *MerchService) DeleteColor(colorID int) error {
+	if err := app.DeleteColor(colorID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+/**
+ * end services
+ * @api {colors}
+ */
+
+/**
+ * start services
+ * @api {transactions}
+ */
+
+func (ms *MerchService) ListTransactions() ([]*models.MerchTransaction, error) {
+	transactions, err := app.ListTransactions()
+	if err != nil {
+		return nil, err
+	}
+
+	return transactions, nil
+}
+
+func (ms *MerchService) CreateTransaction(merch *models.MerchTransaction) error {
+	if err := app.CreateTransaction(merch); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (ms *MerchService) GetTransaction(transactionID int) (*models.MerchTransaction, error) {
+	transaction, err := app.GetTransaction(transactionID)
+	if err != nil {
+		return nil, err
+	}
+
+	return transaction, nil
+}
+
+/**
+ * end services
+ * @api {transactions}
+ */
