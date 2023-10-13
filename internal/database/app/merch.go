@@ -60,8 +60,21 @@ func ListProducts() ([]*models.MerchProduct, error) {
 func GetProductByID(productID int) (*models.MerchProduct, error) {
 	var product models.MerchProduct
 	err := database.DB.QueryRow(context.Background(), `
-		SELECT id, title, description, category_id, primary_image_id, created_at, updated_at FROM merch.product WHERE id = $1`, productID).
-		Scan(&product.ID, &product.Title, &product.Description, &product.CategoryID, &product.PrimaryImageID, &product.CreatedAt, &product.UpdatedAt)
+		SELECT 
+		    p.id, p.title, p.description, p.category_id, p.primary_image_id, p.created_at, p.updated_at,
+		    s.id AS size_id, s.name AS size_name,
+		    c.id AS color_id, c.name AS color_name,
+			pr.id AS price_id, pr.id AS price_price
+		FROM merch.product p
+		LEFT JOIN merch.size s ON p.id = s.product_id
+		LEFT JOIN merch.color c ON p.id = c.product_id
+		LEFT JOIN merch.price pr ON p.id = pr.product_id
+		WHERE p.id = $1`, productID).
+		Scan(
+			&product.ID, &product.Title, &product.Description, &product.CategoryID, &product.PrimaryImageID, &product.CreatedAt, &product.UpdatedAt,
+			&product.Size.ID, &product.Size.Name,
+			&product.Color.ID, &product.Color.Name,
+			&product.Price.ID, &product.Price.Price)
 	if err != nil {
 		return nil, err
 	}

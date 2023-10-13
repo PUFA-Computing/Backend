@@ -58,7 +58,13 @@ func (h *Handler) UpdateProduct(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, updatedProduct)
+	c.JSON(http.StatusOK, gin.H{
+		"data": gin.H{
+			"type":       "products",
+			"id":         productID,
+			"attributes": updatedProduct,
+		},
+	})
 }
 
 func (h *Handler) DeleteProduct(c *gin.Context) {
