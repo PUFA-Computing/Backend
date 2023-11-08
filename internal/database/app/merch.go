@@ -59,25 +59,38 @@ func ListProducts() ([]*models.MerchProduct, error) {
 
 func GetProductByID(productID int) (*models.MerchProduct, error) {
 	var product models.MerchProduct
+
+	// Query the product data
 	err := database.DB.QueryRow(context.Background(), `
-		SELECT 
-		    p.id, p.title, p.description, p.category_id, p.primary_image_id, p.created_at, p.updated_at,
-		    s.id AS size_id, s.name AS size_name,
-		    c.id AS color_id, c.name AS color_name,
-			pr.id AS price_id, pr.id AS price_price
-		FROM merch.product p
-		LEFT JOIN merch.size s ON p.id = s.product_id
-		LEFT JOIN merch.color c ON p.id = c.product_id
-		LEFT JOIN merch.price pr ON p.id = pr.product_id
-		WHERE p.id = $1`, productID).
-		Scan(
-			&product.ID, &product.Title, &product.Description, &product.CategoryID, &product.PrimaryImageID, &product.CreatedAt, &product.UpdatedAt,
-			&product.Size.ID, &product.Size.Name,
-			&product.Color.ID, &product.Color.Name,
-			&product.Price.ID, &product.Price.Price)
+        SELECT 
+            p.id, p.title, p.description, p.category_id, p.primary_image_id, p.created_at, p.updated_at
+        FROM merch.product p
+        WHERE p.id = $1`, productID).
+		Scan(&product.ID, &product.Title, &product.Description, &product.CategoryID, &product.PrimaryImageID, &product.CreatedAt, &product.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
+
+	// Query and associate sizes
+	sizes, err := GetSizeProduct(productID)
+	if err != nil {
+		return nil, err
+	}
+	product.Size = sizes
+
+	// Query and associate colors
+	colors, err := GetColorProduct(productID)
+	if err != nil {
+		return nil, err
+	}
+	product.Color = colors
+
+	// Query and associate prices
+	prices, err := GetProductPrice(productID)
+	if err != nil {
+		return nil, err
+	}
+	product.Price = prices
 
 	return &product, nil
 }
@@ -124,16 +137,25 @@ func GetColorProduct(productID int) ([]*models.MerchColor, error) {
 	return colors, nil
 }
 
-func GetProductPrice(productID int) (*models.MerchPrice, error) {
-	var price models.MerchPrice
-	err := database.DB.QueryRow(context.Background(), `
-		SELECT id, product_id, price, created_at, updated_at FROM merch.price WHERE product_id = $1`, productID).
-		Scan(&price.ID, &price.ProductID, &price.Price, &price.CreatedAt, &price.UpdatedAt)
+func GetProductPrice(productID int) ([]*models.MerchPrice, error) {
+	rows, err := database.DB.Query(context.Background(), `
+        SELECT id, product_id, price, created_at, updated_at FROM merch.price WHERE product_id = $1`, productID)
 	if err != nil {
 		return nil, err
 	}
 
-	return &price, nil
+	var prices []*models.MerchPrice
+	for rows.Next() {
+		var price models.MerchPrice
+		err := rows.Scan(&price.ID, &price.ProductID, &price.Price, &price.CreatedAt, &price.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		prices = append(prices, &price)
+	}
+
+	return prices, nil
 }
 
 /**

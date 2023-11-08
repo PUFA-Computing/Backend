@@ -63,6 +63,25 @@ func (ms *MerchService) GetProductByID(productID int) (*models.MerchProduct, err
 		return nil, err
 	}
 
+	sizes, err := app.GetSizeProduct(productID)
+	if err != nil {
+		return nil, err
+	}
+
+	colors, err := app.GetColorProduct(productID)
+	if err != nil {
+		return nil, err
+	}
+
+	prices, err := app.GetProductPrice(productID)
+	if err != nil {
+		return nil, err
+	}
+
+	product.Size = sizes
+	product.Color = colors
+	product.Price = prices
+
 	return product, nil
 }
 
@@ -84,7 +103,7 @@ func (ms *MerchService) GetColorProduct(productID int) ([]*models.MerchColor, er
 	return colors, nil
 }
 
-func (ms *MerchService) GetProductPrice(productID int) (*models.MerchPrice, error) {
+func (ms *MerchService) GetProductPrice(productID int) ([]*models.MerchPrice, error) {
 	price, err := app.GetProductPrice(productID)
 	if err != nil {
 		return nil, err

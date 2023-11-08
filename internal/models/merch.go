@@ -14,16 +14,16 @@ type MerchCategory struct {
 }
 
 type MerchProduct struct {
-	ID             int         `json:"id"`
-	Title          string      `json:"title"`
-	Description    string      `json:"description"`
-	CategoryID     int         `json:"category_id"`
-	PrimaryImageID int         `json:"primary_image_id"`
-	Size           *MerchSize  `json:"size"`
-	Color          *MerchColor `json:"color"`
-	Price          *MerchPrice `json:"price"`
-	CreatedAt      time.Time   `json:"created_at"`
-	UpdatedAt      time.Time   `json:"updated_at"`
+	ID             int           `json:"id"`
+	Title          string        `json:"title"`
+	Description    string        `json:"description"`
+	CategoryID     int           `json:"category_id"`
+	PrimaryImageID int           `json:"primary_image_id"`
+	Size           []*MerchSize  `json:"size"`
+	Color          []*MerchColor `json:"color"`
+	Price          []*MerchPrice `json:"price"`
+	CreatedAt      time.Time     `json:"created_at"`
+	UpdatedAt      time.Time     `json:"updated_at"`
 }
 
 type MerchSize struct {

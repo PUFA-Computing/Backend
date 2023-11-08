@@ -33,11 +33,18 @@ func (h *Handler) CreateProduct(c *gin.Context) {
 	}
 
 	if err := h.MerchService.CreateProduct(&newProduct); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create product"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, newProduct)
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data": gin.H{
+			"type":       "products",
+			"id":         newProduct.ID,
+			"attributes": newProduct,
+		},
+	})
 }
 
 func (h *Handler) UpdateProduct(c *gin.Context) {
@@ -59,6 +66,7 @@ func (h *Handler) UpdateProduct(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
 		"data": gin.H{
 			"type":       "products",
 			"id":         productID,
@@ -89,7 +97,10 @@ func (h *Handler) ListProducts(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, products)
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data":   products,
+	})
 }
 
 func (h *Handler) GetProductByID(c *gin.Context) {
@@ -105,7 +116,14 @@ func (h *Handler) GetProductByID(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, product)
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data": gin.H{
+			"type":       "products",
+			"id":         productID,
+			"attributes": product,
+		},
+	})
 }
 
 func (h *Handler) GetSizeProduct(c *gin.Context) {

@@ -1,3 +1,4 @@
+CREATE SCHEMA IF NOT EXISTS merch;
 CREATE TABLE IF NOT EXISTS merch.category (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -43,7 +44,7 @@ CREATE TABLE IF NOT EXISTS merch.price (
 
 CREATE TABLE IF NOT EXISTS merch.transaction (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
+    user_id UUID NOT NULL,
     product_id INT NOT NULL,
     coupon_id INT,
     proof_of_payment TEXT,
